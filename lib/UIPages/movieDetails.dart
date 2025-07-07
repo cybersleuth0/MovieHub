@@ -30,6 +30,10 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Determine padding based on screen width
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 600;
+
     return BlocBuilder<MovieDetailsBloc, MovieDetailsState>(
       builder: (context, state) {
         if (state is MovieDetailsSuccessState) {
@@ -54,7 +58,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
             body: SingleChildScrollView(
               child: Column(
                 children: [
-                  const SizedBox(height: 20),
+                  SizedBox(height:20),
                   // Poster with Gradient
                   Stack(
                     children: [
@@ -131,7 +135,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
 
                   // Tagline
                   Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: EdgeInsets.all(isMobile ? 12.0 : 16.0),
                     child: Text(
                       '"${state.movieDetails.tagline ?? ""}"',
                       textAlign: TextAlign.center,
@@ -145,7 +149,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
 
                   // Description
                   Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16.0),
+                    margin: EdgeInsets.symmetric(
+                        horizontal: isMobile ? 12.0 : 16.0),
                     decoration: BoxDecoration(
                       color: Colors.black.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12.0),
@@ -155,18 +160,18 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                           ? state.movieDetails.overview
                           : "No description available.",
                       textAlign: TextAlign.justify,
-                      style: GoogleFonts.lato(
-                        fontSize: 17,
-                        height: 1.6,
-                        color: Colors.white,
+                      style: GoogleFonts.openSans(
+                        fontSize: isMobile ? 15 : 17,
+                        height: isMobile ? 1.5 : 1.6,
+                        color: Colors.white.withOpacity(0.9),
                       ),
                     ),
                   ),
 
-                  const SizedBox(height: 10),
+                  SizedBox(height: isMobile ? 10 : 20),
                   // Movie Metadata
                   Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: EdgeInsets.all(isMobile ? 12.0 : 16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -174,60 +179,39 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                           "Release Date",
                           state.movieDetails.releaseDate,
                         ),
-                        Divider(
-                          color: Colors.grey.withOpacity(0.7),
-                          thickness: 2,
-                        ),
+                        _buildDivider(),
                         _buildInfoRow("Status", state.movieDetails.status),
-                        Divider(
-                          color: Colors.grey.withOpacity(0.7),
-                          thickness: 2,
-                        ),
+                        _buildDivider(),
                         _buildInfoRow(
                           "Adult Content",
                           state.movieDetails.adult ? "Yes" : "No",
                         ),
-                        Divider(
-                          color: Colors.grey.withOpacity(0.7),
-                          thickness: 2,
-                        ),
+                        _buildDivider(),
                         _buildInfoRow(
                           "Language",
                           state.movieDetails.originalLanguage.toUpperCase(),
                         ),
-                        Divider(
-                          color: Colors.grey.withOpacity(0.7),
-                          thickness: 2,
-                        ),
+                        _buildDivider(),
                         _buildInfoRow(
                           "Runtime",
                           "${state.movieDetails.runtime} minutes",
                         ),
-                        Divider(
-                          color: Colors.grey.withOpacity(0.7),
-                          thickness: 2,
-                        ),
+                        _buildDivider(),
                         _buildInfoRow(
                           "Budget",
                           "\$${_formatCurrency(state.movieDetails.budget)}",
                         ),
-                        Divider(
-                          color: Colors.grey.withOpacity(0.7),
-                          thickness: 2,
-                        ),
+                        _buildDivider(),
                         _buildInfoRow(
                           "Revenue",
                           "\$${_formatCurrency(state.movieDetails.revenue)}",
                         ),
-                        Divider(
-                          color: Colors.grey.withOpacity(0.7),
-                          thickness: 2,
-                        ),
+                        _buildDivider(),
                         _buildInfoRow(
                           "Popularity",
                           state.movieDetails.popularity.toStringAsFixed(1),
                         ),
-                        const SizedBox(height: 20),
+                        SizedBox(height: isMobile ? 10 : 20),
                       ],
                     ),
                   ),
@@ -250,6 +234,14 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
         return Container();
       },
     );
+  }
+
+  // Helper method to create a divider
+  Widget _buildDivider() {
+    return Divider(
+                          color: Colors.grey.withOpacity(0.7),
+                          thickness: 2,
+                        );
   }
 }
 
