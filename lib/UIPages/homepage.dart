@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:movieshub/AppConstant/urls.dart';
-import 'package:movieshub/Bloc/movies_bloc.dart';
-import 'package:movieshub/Bloc/movies_state.dart';
+import 'package:movieshub/Bloc/MovieLoadBloc/movies_bloc.dart';
+import 'package:movieshub/Bloc/MovieLoadBloc/movies_state.dart';
 
-import '../Bloc/movies_event.dart';
+import '../AppConstant/constant.dart';
+import '../Bloc/MovieLoadBloc/movies_event.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -154,7 +155,9 @@ class _HomePageState extends State<HomeScreen> {
             BlocBuilder<MoviesBloc, MoviesState>(
               builder: (context, state) {
                 if (state is LoadingState) {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(
+                    child: CircularProgressIndicator(color: Colors.white),
+                  );
                 }
                 if (state is HomepageInitailStae) {
                   return Column(
@@ -164,36 +167,14 @@ class _HomePageState extends State<HomeScreen> {
                       // Movie Geners Name
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Trending Movies",
-                              style: GoogleFonts.lato(
-                                color: Colors.white,
-                                fontSize: 21,
-                                fontWeight: FontWeight.w500,
-                                height: 1.2,
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  "See All",
-                                  style: GoogleFonts.lato(
-                                    color: Colors.red,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                                SizedBox(width: 5),
-                                Icon(
-                                  Icons.arrow_forward,
-                                  color: Colors.red,
-                                  size: 20,
-                                ),
-                              ],
-                            ),
-                          ],
+                        child: Text(
+                          "Trending Movies",
+                          style: GoogleFonts.lato(
+                            color: Colors.white,
+                            fontSize: 21,
+                            fontWeight: FontWeight.w500,
+                            height: 1.2,
+                          ),
                         ),
                       ),
                       SizedBox(height: 20),
@@ -224,50 +205,59 @@ class _HomePageState extends State<HomeScreen> {
                             );
                           }
                           final movie = state.trendingMovies[index];
-                          return ClipRRect(
-                            borderRadius: BorderRadius.circular(15.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: [
-                                // Movie Poster
-                                Expanded(
-                                  child: Image.network(
-                                    Urls.getPosterImage + movie.posterPath,
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
+                          return InkWell(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                context,
+                                AppRoutes.ROUTE_MOVIE_DETAILS,
+                                arguments: movie.id,
+                              );
+                            },
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(15.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  // Movie Poster
+                                  Expanded(
+                                    child: Image.network(
+                                      Urls.getPosterImage + movie.posterPath,
+                                      fit: BoxFit.cover,
+                                      width: double.infinity,
+                                    ),
                                   ),
-                                ),
 
-                                // Overlay with title & date
-                                Container(
-                                  padding: const EdgeInsets.all(8.0),
-                                  color: Colors.black.withOpacity(0.6),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        movie.title,
-                                        style: GoogleFonts.poppins(
-                                          color: Colors.white,
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w600,
+                                  // Overlay with title & date
+                                  Container(
+                                    padding: const EdgeInsets.all(8.0),
+                                    color: Colors.black.withOpacity(0.6),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          movie.title,
+                                          style: GoogleFonts.poppins(
+                                            color: Colors.white,
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
                                         ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      const SizedBox(height: 2),
-                                      Text(
-                                        movie.releaseDate,
-                                        style: GoogleFonts.lato(
-                                          color: Colors.white70,
-                                          fontSize: 13,
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          movie.releaseDate,
+                                          style: GoogleFonts.lato(
+                                            color: Colors.white70,
+                                            fontSize: 13,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           );
                         },

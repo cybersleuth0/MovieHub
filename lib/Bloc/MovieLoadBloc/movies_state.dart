@@ -1,4 +1,4 @@
-import '../model/model.dart';
+import '../../model/model.dart';
 
 abstract class MoviesState {}
 
@@ -22,3 +22,4 @@ class HomepageInitailStae extends MoviesState {
     this.isLoadingMore = false,
   });
 }
+

@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieshub/AppConstant/urls.dart';
-import 'package:movieshub/Bloc/movies_event.dart';
-import 'package:movieshub/Bloc/movies_state.dart';
+import 'package:movieshub/Bloc/MovieLoadBloc/movies_event.dart';
+import 'package:movieshub/Bloc/MovieLoadBloc/movies_state.dart';
 import 'package:movieshub/data/remote/helper/api_helper.dart';
 import 'package:movieshub/model/model.dart';
 
@@ -18,7 +18,7 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
 
       emit(LoadingState());
       pageNum = 1;
-      allMovies.clear();
+      //allMovies.clear();
 
       try {
         final response = await apiHelper.getApi(
@@ -63,5 +63,13 @@ class MoviesBloc extends Bloc<MoviesEvent, MoviesState> {
         _isLoading = false;
       }
     });
+  }
+
+  @override
+  Future<void> close() {
+    pageNum = 1;
+    //allMovies.clear();
+    _isLoading = false;
+    return super.close();
   }
 }

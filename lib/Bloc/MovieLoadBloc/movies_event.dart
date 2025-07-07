@@ -7,3 +7,4 @@ class GetMoreMoviesEvent extends MoviesEvent {
 
   GetMoreMoviesEvent({this.pageNum});
 }
+

@@ -5,4 +5,5 @@ class Urls {
   static const String getTrendingMovies = "$moviesDB/trending/movie/day?language=en-US&api_key=$apiKey";
   static const String SearchMovie =
       "$moviesDB/search/movie?query=kgf&include_adult=false&language=en-US&api_key=$apiKey&page=1";
+  static const String getMovieDetails = "$moviesDB/movie/";
 }
