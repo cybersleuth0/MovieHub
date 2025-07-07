@@ -30,7 +30,6 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Determine padding based on screen width
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobile = screenWidth < 600;
 
